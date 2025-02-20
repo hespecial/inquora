@@ -9,6 +9,10 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
+const (
+	prefixActivation = "biz#activation#%s"
+)
+
 type RegisterLogic struct {
 	logx.Logger
 	ctx    context.Context

@@ -31,10 +31,10 @@ var (
 type (
 	userModel interface {
 		Insert(ctx context.Context, data *User) (sql.Result, error)
-		FindOne(ctx context.Context, id uint64) (*User, error)
+		FindOne(ctx context.Context, id int64) (*User, error)
 		FindOneByMobile(ctx context.Context, mobile string) (*User, error)
 		Update(ctx context.Context, data *User) error
-		Delete(ctx context.Context, id uint64) error
+		Delete(ctx context.Context, id int64) error
 	}
 
 	defaultUserModel struct {
@@ -43,7 +43,7 @@ type (
 	}
 
 	User struct {
-		Id         uint64    `db:"id"`          // 主键ID
+		Id         int64     `db:"id"`          // 主键ID
 		Username   string    `db:"username"`    // 用户名
 		Avatar     string    `db:"avatar"`      // 头像
 		Mobile     string    `db:"mobile"`      // 手机号
@@ -59,7 +59,7 @@ func newUserModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *d
 	}
 }
 
-func (m *defaultUserModel) Delete(ctx context.Context, id uint64) error {
+func (m *defaultUserModel) Delete(ctx context.Context, id int64) error {
 	data, err := m.FindOne(ctx, id)
 	if err != nil {
 		return err
@@ -74,7 +74,7 @@ func (m *defaultUserModel) Delete(ctx context.Context, id uint64) error {
 	return err
 }
 
-func (m *defaultUserModel) FindOne(ctx context.Context, id uint64) (*User, error) {
+func (m *defaultUserModel) FindOne(ctx context.Context, id int64) (*User, error) {
 	inquoraUserUserIdKey := fmt.Sprintf("%s%v", cacheInquoraUserUserIdPrefix, id)
 	var resp User
 	err := m.QueryRowCtx(ctx, &resp, inquoraUserUserIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {

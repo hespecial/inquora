@@ -14,8 +14,6 @@ service User {
 message RegisterRequest {
   string username = 1;
   string mobile = 2;
-  string avatar = 3;
-  string password = 4;
 }
 
 message RegisterResponse {
@@ -51,3 +49,6 @@ message SendSmsRequest {
 
 message SendSmsResponse {
 }
+
+// cd application/user/rpc
+// goctl rpc protoc ./user.proto --go_out=. --go-grpc_out=. --zrpc_out=./
