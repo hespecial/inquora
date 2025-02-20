@@ -60,7 +60,7 @@ func (l *VerificationLogic) Verification(req *types.VerificationRequest) (resp *
 		logx.Errorf("incrVerificationCount mobile: %s error: %v", req.Mobile, err)
 	}
 
-	return
+	return &types.VerificationResponse{}, nil
 }
 
 func (l *VerificationLogic) getVerificationCount(mobile string) (int, error) {

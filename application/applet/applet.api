@@ -35,7 +35,7 @@ type (
 )
 
 @server (
-	prefix: /v1
+	prefix: /api
 )
 service applet-api {
 	@handler RegisterHandler
@@ -49,7 +49,7 @@ service applet-api {
 }
 
 @server (
-	prefix:    /v1/user
+	prefix:    /api/user
 	signature: true
 	jwt:       Auth
 )
@@ -58,3 +58,5 @@ service applet-api {
 	get /info returns (UserInfoResponse)
 }
 
+// cd application/applet
+// goctl api go --dir=./ --api applet.api

@@ -2,7 +2,11 @@ package logic
 
 import (
 	"context"
+	"errors"
+	"github.com/zeromicro/go-zero/core/stores/redis"
 	"inquora/application/applet/internal/code"
+	"inquora/application/user/rpc/user"
+	"inquora/pkg/jwt"
 	"strings"
 
 	"inquora/application/applet/internal/svc"
@@ -35,5 +39,50 @@ func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, 
 		return nil, code.VerificationCodeEmpty
 	}
 
-	return
+	if err = checkVerificationCode(l.svcCtx.BizRedis, req.Mobile, req.VerificationCode); err != nil {
+		return nil, err
+	}
+	u, err := l.svcCtx.UserRpc.FindByMobile(l.ctx, &user.FindByMobileRequest{Mobile: req.Mobile})
+	if err != nil {
+		logx.Errorf("FindByMobile error: %v", err)
+		return nil, err
+	}
+	token, err := jwt.BuildTokens(jwt.TokenOptions{
+		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,
+		AccessExpire: l.svcCtx.Config.Auth.AccessExpire,
+		Fields: map[string]interface{}{
+			types.UserIdKey: u.UserId,
+		},
+	})
+	if err != nil {
+		logx.Errorf("BuildTokens error: %v", err)
+		return nil, err
+	}
+
+	if err = delActivationCache(req.Mobile, l.svcCtx.BizRedis); err != nil {
+		logx.Errorf("delActivationCache error: %v", err)
+		return nil, err
+	}
+	return &types.LoginResponse{
+		UserId: u.UserId,
+		Token: types.Token{
+			AccessToken:  token.AccessToken,
+			AccessExpire: token.AccessExpire,
+		},
+	}, nil
+}
+
+func checkVerificationCode(rds *redis.Redis, mobile, code string) error {
+	cacheCode, err := getActivationCache(mobile, rds)
+	if err != nil {
+		return err
+	}
+	if cacheCode == "" {
+		return errors.New("verification code expired")
+	}
+	if cacheCode != code {
+		return errors.New("verification code failed")
+	}
+
+	return nil
 }
