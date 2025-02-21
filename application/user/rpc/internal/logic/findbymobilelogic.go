@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"errors"
+	"inquora/application/user/rpc/internal/model"
 
 	"inquora/application/user/rpc/internal/svc"
 	"inquora/application/user/rpc/pb"
@@ -25,9 +27,12 @@ func NewFindByMobileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Find
 
 func (l *FindByMobileLogic) FindByMobile(in *pb.FindByMobileRequest) (*pb.FindByMobileResponse, error) {
 	user, err := l.svcCtx.UserModel.FindOneByMobile(l.ctx, in.Mobile)
-	if err != nil {
+	if err != nil && !errors.Is(err, model.ErrNotFound) {
 		logx.Errorf("FindById userId: %s error: %v", in.Mobile, err)
 		return nil, err
+	}
+	if user == nil {
+		return &pb.FindByMobileResponse{}, nil
 	}
 	return &pb.FindByMobileResponse{
 		UserId:   user.Id,

@@ -2,11 +2,10 @@ package logic
 
 import (
 	"context"
-	"inquora/application/user/rpc/user"
-	"inquora/pkg/xcode"
-
+	"encoding/json"
 	"inquora/application/applet/internal/svc"
 	"inquora/application/applet/internal/types"
+	"inquora/application/user/rpc/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,10 +25,9 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 }
 
 func (l *UserInfoLogic) UserInfo() (resp *types.UserInfoResponse, err error) {
-	userId, ok := l.ctx.Value(types.UserIdKey).(int64)
-	if !ok {
-		logx.Errorf("assert user id fail")
-		return nil, xcode.AccessDenied
+	userId, err := l.ctx.Value(types.UserIdKey).(json.Number).Int64()
+	if err != nil {
+		return nil, err
 	}
 	u, err := l.svcCtx.UserRpc.FindById(l.ctx, &user.FindByIdRequest{UserId: userId})
 	if err != nil {

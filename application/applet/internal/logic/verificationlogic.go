@@ -19,6 +19,7 @@ const (
 	prefixVerificationCount = "biz#verification#count#%s"
 	verificationLimitPerDay = 10
 	expireActivation        = 60 * 30
+	prefixActivation        = "biz#activation#%s"
 )
 
 type VerificationLogic struct {

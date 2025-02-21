@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"inquora/pkg/interceptors"
 
 	"inquora/application/user/rpc/internal/config"
 	"inquora/application/user/rpc/internal/server"
@@ -32,6 +33,8 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 	})
+	// 自定义拦截器
+	s.AddUnaryInterceptors(interceptors.ServerErrorInterceptor())
 	defer s.Stop()
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)

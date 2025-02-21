@@ -16,18 +16,15 @@ type LoginResponse struct {
 type RegisterRequest struct {
 	Name             string `json:"name"`
 	Mobile           string `json:"mobile"`
-	Password         string `json:"password"`
 	VerificationCode string `json:"verification_code"`
 }
 
 type RegisterResponse struct {
 	UserId int64 `json:"user_id"`
-	Token  Token `json:"token"`
 }
 
 type Token struct {
-	AccessToken  string `json:"access_token"`
-	AccessExpire int64  `json:"access_expire"`
+	AccessToken string `json:"access_token"`
 }
 
 type UserInfoResponse struct {

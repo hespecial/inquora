@@ -7,6 +7,7 @@ import (
 	"inquora/application/applet/internal/code"
 	"inquora/application/user/rpc/user"
 	"inquora/pkg/jwt"
+	"inquora/pkg/xcode"
 	"strings"
 
 	"inquora/application/applet/internal/svc"
@@ -47,6 +48,9 @@ func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, 
 		logx.Errorf("FindByMobile error: %v", err)
 		return nil, err
 	}
+	if u.UserId == 0 {
+		return nil, xcode.AccessDenied
+	}
 	token, err := jwt.BuildTokens(jwt.TokenOptions{
 		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,
 		AccessExpire: l.svcCtx.Config.Auth.AccessExpire,
@@ -66,8 +70,7 @@ func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, 
 	return &types.LoginResponse{
 		UserId: u.UserId,
 		Token: types.Token{
-			AccessToken:  token.AccessToken,
-			AccessExpire: token.AccessExpire,
+			AccessToken: token.AccessToken,
 		},
 	}, nil
 }
