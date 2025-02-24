@@ -1,8 +1,6 @@
 create database inquora_user;
 use inquora_user;
 
--- cd application/user/rpc
--- goctl model mysql datasource --dir ./internal/model --table user --cache true --url "root:jiaomu2014@tcp(127.0.0.1:3306)/inquora_user"
 CREATE TABLE `user` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `username` varchar(32) NOT NULL DEFAULT '' COMMENT '用户名',
@@ -16,3 +14,6 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户表';
 
 insert into user(username, avatar, mobile) values ('luxiao', '', '13888880000');
+
+-- cd application/user/rpc
+-- goctl model mysql datasource --dir ./internal/model --table user --cache true --url "root:jiaomu2014@tcp(127.0.0.1:3306)/inquora_user"

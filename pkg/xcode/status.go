@@ -106,7 +106,7 @@ func gRPCStatusFromXCode(code XCode) (*status.Status, error) {
 	var sts *Status
 	switch v := code.(type) {
 	case nil:
-		panic("gRPCStatusFromXCode called with nil Code")
+		return status.New(codes.Unknown, "nil error"), nil
 	case *Status:
 		sts = v
 	case Code:
@@ -120,7 +120,8 @@ func gRPCStatusFromXCode(code XCode) (*status.Status, error) {
 		}
 	}
 
-	stas := status.New(codes.OK, strconv.Itoa(sts.Code()))
+	grpcCode := mapXCodeToGRPCCode(sts.Code())
+	stas := status.New(grpcCode, strconv.Itoa(sts.Code()))
 	return stas.WithDetails(sts.Proto())
 }
 
@@ -189,9 +190,38 @@ func toXCode(grpcStatus *status.Status) Code {
 		return Deadline
 	case codes.Unavailable:
 		return ServiceUnavailable
+	case codes.Internal:
+		return ServerErr
 	case codes.Unknown:
 		return String(grpcStatus.Message())
 	}
 
 	return ServerErr
+}
+
+func mapXCodeToGRPCCode(code int) codes.Code {
+	switch code {
+	case OK.Code():
+		return codes.OK
+	case RequestErr.Code():
+		return codes.InvalidArgument
+	case LimitExceed.Code():
+		return codes.ResourceExhausted
+	case Unauthorized.Code():
+		return codes.Unauthenticated
+	case MethodNotAllowed.Code():
+		return codes.Unimplemented
+	case Deadline.Code():
+		return codes.DeadlineExceeded
+	case AccessDenied.Code():
+		return codes.PermissionDenied
+	case ServiceUnavailable.Code():
+		return codes.Unavailable
+	case NotFound.Code():
+		return codes.NotFound
+	case ServerErr.Code():
+		return codes.Internal
+	default:
+		return codes.Unknown
+	}
 }

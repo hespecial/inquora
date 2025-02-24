@@ -1,0 +1,11 @@
+Name: article.rpc
+ListenOn: 0.0.0.0:8079
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: article.rpc
+DataSource: {username}:{password}@tcp(127.0.0.1:3306)/inquora_article?charset=utf8mb4&parseTime=True&loc=Local
+CacheRedis:
+  - Host: 127.0.0.1:6379
+BizRedis:
+  Host: 127.0.0.1:6379
