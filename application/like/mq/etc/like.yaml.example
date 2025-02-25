@@ -1,0 +1,10 @@
+Name: mq-api
+KqConsumerConf:
+  Name: like-kq-consumer
+  Brokers:
+    - 127.0.0.1:9092
+  Group: group-inquora-like
+  Topic: topic-inquora-like
+  Offset: last
+  Consumers: 1
+  Processors: 1
