@@ -14,11 +14,18 @@ import (
 )
 
 type (
-	PublishRequest  = pb.PublishRequest
-	PublishResponse = pb.PublishResponse
+	ArticleDetailRequest  = pb.ArticleDetailRequest
+	ArticleDetailResponse = pb.ArticleDetailResponse
+	ArticleItem           = pb.ArticleItem
+	ArticleListRequest    = pb.ArticleListRequest
+	ArticleListResponse   = pb.ArticleListResponse
+	PublishRequest        = pb.PublishRequest
+	PublishResponse       = pb.PublishResponse
 
 	Article interface {
 		Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishResponse, error)
+		ArticleList(ctx context.Context, in *ArticleListRequest, opts ...grpc.CallOption) (*ArticleListResponse, error)
+		ArticleDetail(ctx context.Context, in *ArticleDetailRequest, opts ...grpc.CallOption) (*ArticleDetailResponse, error)
 	}
 
 	defaultArticle struct {
@@ -35,4 +42,14 @@ func NewArticle(cli zrpc.Client) Article {
 func (m *defaultArticle) Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishResponse, error) {
 	client := pb.NewArticleClient(m.cli.Conn())
 	return client.Publish(ctx, in, opts...)
+}
+
+func (m *defaultArticle) ArticleList(ctx context.Context, in *ArticleListRequest, opts ...grpc.CallOption) (*ArticleListResponse, error) {
+	client := pb.NewArticleClient(m.cli.Conn())
+	return client.ArticleList(ctx, in, opts...)
+}
+
+func (m *defaultArticle) ArticleDetail(ctx context.Context, in *ArticleDetailRequest, opts ...grpc.CallOption) (*ArticleDetailResponse, error) {
+	client := pb.NewArticleClient(m.cli.Conn())
+	return client.ArticleDetail(ctx, in, opts...)
 }

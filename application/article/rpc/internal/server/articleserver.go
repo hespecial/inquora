@@ -27,3 +27,13 @@ func (s *ArticleServer) Publish(ctx context.Context, in *pb.PublishRequest) (*pb
 	l := logic.NewPublishLogic(ctx, s.svcCtx)
 	return l.Publish(in)
 }
+
+func (s *ArticleServer) ArticleList(ctx context.Context, in *pb.ArticleListRequest) (*pb.ArticleListResponse, error) {
+	l := logic.NewArticleListLogic(ctx, s.svcCtx)
+	return l.ArticleList(in)
+}
+
+func (s *ArticleServer) ArticleDetail(ctx context.Context, in *pb.ArticleDetailRequest) (*pb.ArticleDetailResponse, error) {
+	l := logic.NewArticleDetailLogic(ctx, s.svcCtx)
+	return l.ArticleDetail(in)
+}
