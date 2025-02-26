@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"inquora/application/applet/internal/code"
 	"inquora/application/user/rpc/user"
@@ -75,16 +74,16 @@ func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, 
 	}, nil
 }
 
-func checkVerificationCode(rds *redis.Redis, mobile, code string) error {
+func checkVerificationCode(rds *redis.Redis, mobile, c string) error {
 	cacheCode, err := getActivationCache(mobile, rds)
 	if err != nil {
 		return err
 	}
 	if cacheCode == "" {
-		return errors.New("verification code expired")
+		return code.VerificationCodeExpire
 	}
-	if cacheCode != code {
-		return errors.New("verification code failed")
+	if cacheCode != c {
+		return code.VerificationCodeInvalid
 	}
 
 	return nil

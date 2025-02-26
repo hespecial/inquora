@@ -12,6 +12,14 @@ type Config struct {
 		AccessSecret string
 		AccessExpire int64
 	}
-	BizRedis redis.RedisConf
-	UserRpc  zrpc.RpcClientConf
+	Oss struct {
+		RegionId        string
+		BaseUrl         string
+		AccessKeyId     string
+		AccessKeySecret string
+		BucketName      string
+	}
+	BizRedis   redis.RedisConf
+	UserRpc    zrpc.RpcClientConf
+	ArticleRpc zrpc.RpcClientConf
 }

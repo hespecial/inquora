@@ -3,18 +3,17 @@ package logic
 import (
 	"context"
 	"encoding/json"
-	"inquora/application/article/api/internal/code"
+	"inquora/application/applet/internal/code"
 	"inquora/application/article/rpc/pb"
 
-	"inquora/application/article/api/internal/svc"
-	"inquora/application/article/api/internal/types"
+	"inquora/application/applet/internal/svc"
+	"inquora/application/applet/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
 const (
 	minContentLen = 80
-	userIdKey     = "userId"
 )
 
 type PublishLogic struct {
@@ -42,7 +41,7 @@ func (l *PublishLogic) Publish(req *types.PublishRequest) (resp *types.PublishRe
 		return nil, code.ArticleCoverEmpty
 	}
 
-	userId, err := l.ctx.Value(userIdKey).(json.Number).Int64()
+	userId, err := l.ctx.Value(types.UserIdKey).(json.Number).Int64()
 	if err != nil {
 		return nil, err
 	}

@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"inquora/application/article/api/internal/logic"
-	"inquora/application/article/api/internal/svc"
+	"inquora/application/applet/internal/logic"
+	"inquora/application/applet/internal/svc"
 )
 
 func UploadCoverHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

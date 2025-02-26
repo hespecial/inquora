@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"github.com/qiniu/go-sdk/v7/storagev2/uploader"
-	"inquora/application/article/api/internal/code"
+	"inquora/application/applet/internal/code"
 	"net/http"
 	"time"
 
-	"inquora/application/article/api/internal/svc"
-	"inquora/application/article/api/internal/types"
+	"inquora/application/applet/internal/svc"
+	"inquora/application/applet/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
