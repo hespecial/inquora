@@ -29,9 +29,9 @@ service applet-api {
 }
 
 @server (
-	prefix: /api/article
+	prefix:    /api/article
 	signature: true
-	jwt:    Auth
+	jwt:       Auth
 )
 service applet-api {
 	@handler UploadCoverHandler
@@ -39,6 +39,12 @@ service applet-api {
 
 	@handler PublishHandler
 	post /publish (PublishRequest) returns (PublishResponse)
+
+	@handler ArticlesListHandler
+	get /list (ArticleListRequest) returns (ArticleListResponse)
+
+	@handler ArticleDetailHandler
+	get /detail (ArticleDetailRequest) returns (ArticleDetailResponse)
 }
 
 // goctl api go --dir=./application/applet --api ./application/applet/applet.api

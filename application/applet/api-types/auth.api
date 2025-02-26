@@ -28,7 +28,7 @@ type (
 		VerificationCode string `json:"verification_code"`
 	}
 	LoginResponse {
-		UserId int64 `json:"userId"`
+		UserId int64 `json:"user_id"`
 		Token  Token `json:"token"`
 	}
 )

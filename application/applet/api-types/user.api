@@ -1,7 +1,7 @@
 syntax = "v1"
 
 type UserInfoResponse {
-    UserId   int64  `json:"user_id"`
-    Username string `json:"username"`
-    Avatar   string `json:"avatar"`
+	UserId   int64  `json:"user_id"`
+	Username string `json:"username"`
+	Avatar   string `json:"avatar"`
 }

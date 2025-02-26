@@ -49,6 +49,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				Method:  http.MethodGet,
+				Path:    "/detail",
+				Handler: ArticleDetailHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: ArticlesListHandler(serverCtx),
+			},
+			{
 				Method:  http.MethodPost,
 				Path:    "/publish",
 				Handler: PublishHandler(serverCtx),
@@ -60,6 +70,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithSignature(serverCtx.Config.Signature),
 		rest.WithPrefix("/api/article"),
 	)
 }
